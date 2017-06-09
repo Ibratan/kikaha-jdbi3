@@ -1,26 +1,26 @@
-# sizebay-kikaha-jdbi
+# kikaha-jdbi
 Provide tight integration of Jdbi3 for the just released Kikaha 2.0.x version.
 
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/com.sizebay.kikaha/sizebay-kikaha-jdbi/badge.svg)](https://maven-badges.herokuapp.com/maven-central/com.sizebay.kikaha/sizebay-kikaha-jdbi)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.skullabs.kikaha/kikaha-jdbi/badge.svg)](https://maven-badges.herokuapp.com/maven-central/io.skullabs.kikaha/kikaha-jdbi)
 
 ## Dependencies
 If you use Maven:
 ```xml
 <dependency>
-    <groupId>com.sizebay.kikaha</groupId>
-    <artifactId>sizebay-kikaha-jdbi</artifactId>
+    <groupId>io.skullabs.kikaha</groupId>
+    <artifactId>kikaha-jdbi</artifactId>
     <version>0.1.0</version>
 </dependency>
 ```
 If you use Gradle:
 ```gradle
 dependencies {
-    compile group: 'com.sizebay.kikaha', name: 'sizebay-kikaha-jdbi', version: '0.1.0'
+    compile group: 'io.skullabs.kikaha', name: 'kikaha-jdbi', version: '0.1.0'
 }
 ```
 If you are using the Kikaha's command line tool:
 ```bash
-kikaha project add_dep 'com.sizebay.kikaha:sizebay-kikaha-jdbi:0.1.0'
+kikaha project add_dep 'io.skullabs.kikaha:kikaha-jdbi:0.1.0'
 ```
 
 ## Getting Started
@@ -30,13 +30,13 @@ It requires Java 8 and does not support Jdbi's DAO made with Abstract Classes, d
 it has full support of DAOs made with Interface and its default methods.
 
 ### Injecting your DAOs
-Basically, once you have setup 'sizebay-kikaha-jdbi' as dependency, you can inject any Jdbi DAO
+Basically, once you have setup 'kikaha-jdbi' as dependency, you can inject any Jdbi DAO
 on your Kikaha's managed services, all you need is annotate your DAO _interface_ with the
-```sizebay.kikaha.jdbi.JDBI``` annotation.
+```kikaha.jdbi.JDBI``` annotation.
 
 ```java
-import org.jdbi.v3.sqlobject.*;
-import sizebay.kikaha.jdbi.JDBI;
+import org.jdbi.v3.sqlobject.statement.SqlQuery;
+import kikaha.jdbi.JDBI;
 
 @JDBI
 public interface StatisticsDAO {
@@ -62,11 +62,11 @@ public class StatisticsResource {
 ```
 
 ### Mapping Entities
-Out-of-box 'sizebay-kikaha-jdbi' has a very simple mapping system configured. Despite the fact it does not handle
+Out-of-box 'kikaha-jdbi' has a very simple mapping system configured. Despite the fact it does not handle
 One To Many/Many To Many/Many To One aggregations, it is very simple and easy to use. Basically, you have three annotations:
-- ```sizebay.kikaha.jdbi.serializers.Entity```: (mandatory) let Jdbi know that 'sizebay-kikaha-jdbi' will be the Column Mapper of this class.
-- ```sizebay.kikaha.jdbi.serializers.Column```: identify an field that it should be mapped.
-- ```sizebay.kikaha.jdbi.serializers.Optional```: make a column optional. Columns not marked as optional will raise exception
+- ```kikaha.jdbi.serializers.Entity```: (mandatory) let Jdbi know that 'kikaha-jdbi' will be the Column Mapper of this class.
+- ```kikaha.jdbi.serializers.Column```: identify an field that it should be mapped.
+- ```kikaha.jdbi.serializers.Optional```: make a column optional. Columns not marked as optional will raise exception
 during the mapping process if no column with its name was found at the query.
 
 By default, it will bind any field mapped with the ```@Column``` annotation. It will use the field's name as column

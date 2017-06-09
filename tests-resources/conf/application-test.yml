@@ -1,8 +1,8 @@
 server:
   datasources:
     default:
-      jdbc-url: "jdbc:mysql://localhost/sizebay_unittest"
-      username: "sizebay"
-      password: "sizebay0z6g1t1t"
+      jdbc-url: "jdbc:h2:mem:jdbi"
+      username: "username"
+      password: ""
       log-query-execution-longer-than-ms: 0
       log-stacktrace-for-long-query-execution: false

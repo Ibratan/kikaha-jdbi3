@@ -6,17 +6,16 @@
     <parent>
         <groupId>io.skullabs.kikaha</groupId>
         <version>
-            <!-- kikaha-version -->2.1.0-alpha1<!-- /kikaha-version -->
+            <!-- kikaha-version -->2.1.0-alpha21<!-- /kikaha-version -->
         </version>
         <artifactId>kikaha-project</artifactId>
     </parent>
 
-    <groupId>com.sizebay.kikaha</groupId>
-    <artifactId>sizebay-kikaha-jdbi</artifactId>
+    <artifactId>kikaha-jdbi</artifactId>
     <version>0.1.1</version>
     <packaging>jar</packaging>
     <name>${project.artifactId}</name>
-    <url>https://github.com/sizebay/sizebay-kikaha-jdbi</url>
+    <url>https://github.com/Ibratan/kikaha-jdbi3</url>
 
     <licenses>
         <license>
@@ -32,12 +31,17 @@
             <name>Miere Liniel Teixeira</name>
             <email>miere.teixeira@gmail.com</email>
         </developer>
+        <developer>
+            <id>ronei</id>
+            <name>Ronei Vinicius Gebert</name>
+            <email>ronei_vinicius@hotmail.com</email>
+        </developer>
     </developers>
 
     <scm>
-        <connection>scm:git:git@github.com:sizebay/sizebay-kikaha-jdbi.git</connection>
-        <developerConnection>scm:git:git@github.com:sizebay/sizebay-kikaha-jdbi.git</developerConnection>
-        <url>scm:git:git@github.com:sizebay/sizebay-kikaha-jdbi.git</url>
+        <connection>scm:git:git@github.com:Ibratan/kikaha-jdbi3.git</connection>
+        <developerConnection>scm:git:git@github.com:Ibratan/kikaha-jdbi3.git</developerConnection>
+        <url>scm:git:git@github.com:Ibratan/kikaha-jdbi3.git</url>
     </scm>
 
     <properties>
@@ -49,7 +53,7 @@
         <config.dir.output>output</config.dir.output>
         <config.dir.web>webapp</config.dir.web>
         <!-- dependencies version configuration -->
-        <version.jdbi>3.0.0-alpha2</version.jdbi>
+        <version.jdbi>3.0.0-beta1</version.jdbi>
     </properties>
 
     <dependencies>
@@ -72,15 +76,22 @@
             <artifactId>jdbi3-sqlobject</artifactId>
             <version>${version.jdbi}</version>
         </dependency>
+        <!-- test dependencies -->
         <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-            <version>5.1.38</version>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <version>1.4.193</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>ch.qos.logback</groupId>
             <artifactId>logback-classic</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>co.freeside.jdbi-time</groupId>
+            <artifactId>jdbi-time</artifactId>
+            <version>1.1</version>
             <scope>test</scope>
         </dependency>
         <!-- /kikaha-dependencies -->
