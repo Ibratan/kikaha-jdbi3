@@ -40,27 +40,28 @@ public abstract class ResultSetDataRetriever {
 		return ( string != null && !string.isEmpty() ) ? string.charAt( 0 ) : null;
 	}
 
-	static <T> T retrieveOtherKindOfObjects( Class<T> type, ResultSet rs, String name ) throws SQLException {
-		T t = null;
-		if ( type.isEnum() )
-			t = (T)retrieveEnum( (Class)type, rs, name );
-		else if ( rs.wasNull() && !type.isPrimitive() )
-			t = null;
-		else
-			t = (T)rs.getObject( name );
-		return t;
-	}
-
-	static <T extends Enum<T>> Enum<T> retrieveEnum( Class<T> enumType, ResultSet rs, String nm ) throws SQLException {
-		final String string = rs.getString( nm );
-		return ( string != null && !string.isEmpty() ) ? Enum.valueOf( enumType, string ) : null;
-	}
-
 	public static Retriever getDataRetrieverFor( Class<?> type ) {
 		Retriever retriever = RETRIEVERS.get( type );
-		if ( retriever == null )
-			retriever = ResultSetDataRetriever::retrieveOtherKindOfObjects;
+		if ( retriever != null )
+			return retriever;
+		if ( type.isEnum() )
+			return findAndRegisterEnumRetriever( type );
+		return ResultSetDataRetriever::throwExceptionForUnknowType;
+	}
+
+	private static Retriever findAndRegisterEnumRetriever(Class<?> type) {
+		final Retriever retriever = ResultSetDataRetriever::retrieveEnum;
+		registerRetrieverFor(type, retriever);
 		return retriever;
+	}
+
+	static Object retrieveEnum( Class<?> enumType, ResultSet rs, String nm ) throws SQLException {
+		final String string = rs.getString( nm );
+		return ( string != null && !string.isEmpty() ) ? Enum.valueOf( (Class<? extends  Enum>)enumType, string ) : null;
+	}
+
+	static Object throwExceptionForUnknowType( Class<?> enumType, ResultSet rs, String nm ) throws SQLException {
+		throw new SQLException( "No retriever defined for type " + enumType );
 	}
 
 	public static void registerRetrieverFor( Class<?> type, Retriever retriever ) {
