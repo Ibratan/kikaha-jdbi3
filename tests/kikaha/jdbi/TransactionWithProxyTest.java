@@ -12,9 +12,9 @@ import javax.inject.Inject;
 import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
+import java.time.*;
 import java.util.Date;
+import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 
@@ -25,14 +25,19 @@ import static org.junit.Assert.assertEquals;
 public class TransactionWithProxyTest {
 
 	@Inject
-	UserQueries q;
+	UserQueries userQueries;
 
 	@Inject
 	LogQueries logQueries;
 
+	@Inject
+	DataTypesQueries dataTypesQueries;
+
 	@Before
 	public void initializeDatabase(){
-		q.initializeDatabase();
+		userQueries.initializeDatabase();
+		logQueries.initializeDatabase();
+		dataTypesQueries.initializeDatabase();
 	}
 
 	@Test
@@ -41,25 +46,24 @@ public class TransactionWithProxyTest {
 		final User paul = new User();
 		paul.id = 2l;
 		paul.name = "Paul";
-
 		savePaulInDB( paul );
 		ensureThatDoesNotSavedARoleForPaul( paul );
 	}
 
 	private void savePaulInDB( User paul ){
 		try {
-			q.insertUserAndRole(paul, "Developer");
+			userQueries.insertUserAndRole(paul, "Developer");
 		}
 		catch ( Throwable c ) {}
 	}
 
 	private void ensureThatDoesNotSavedARoleForPaul( User paul ) throws IOException {
-		assertEquals( q.retrieveUserRoleByUserId( paul.id ).size(), 1 );
+		assertEquals( userQueries.retrieveUserRoleByUserId( paul.id ).size(), 1 );
 	}
 
 	@Test(expected = MyCustomException.class)
 	public void ensureThatIsAbleToReceiveTheSameExceptionThrownOnTheQueryObject(){
-		q.aMethodThatThrowsMyCustomException();
+		userQueries.aMethodThatThrowsMyCustomException();
 	}
 
 
@@ -69,7 +73,7 @@ public class TransactionWithProxyTest {
 		val log = new Log();
 		log.setDate( ZonedDateTime.now() );
 		log.setText( "Log Text" );
-		saveLogInDb( log );
+		logQueries.insert( log );
 		ensureLogIfExistsInDbAndDateTimeIsCorrect( log );
 	}
 
@@ -78,15 +82,24 @@ public class TransactionWithProxyTest {
 		return ZonedDateTime.ofInstant(instant, ZoneId.systemDefault());
 	}
 
-	private void saveLogInDb( Log log ){
-		logQueries.initializeDatabase();
-		logQueries.insert( log );
-	}
-
 	private void ensureLogIfExistsInDbAndDateTimeIsCorrect( Log log ){
 		val dbLogs = logQueries.selectAll();
 		assertEquals( 1, dbLogs.size() );
 		assertEquals( log.getDate(), dbLogs.get(0).getDate() );
+	}
+
+	@Test
+	public void ensureThatWorksWithDataTypes(){
+		final DataTypes object = new DataTypes();
+		object.setMyLocalDateTime(LocalDateTime.now());
+		object.setMyLocalDate(LocalDate.now());
+		object.setMyLocalTime(LocalTime.now().withNano(0));
+		dataTypesQueries.insert(object);
+		final List<DataTypes> results = dataTypesQueries.find();
+		assertEquals(1, results.size());
+		assertEquals(object.getMyLocalDateTime(), results.get(0).getMyLocalDateTime());
+		assertEquals(object.getMyLocalDate(), results.get(0).getMyLocalDate());
+		assertEquals(object.getMyLocalTime(), results.get(0).getMyLocalTime());
 	}
 
 }

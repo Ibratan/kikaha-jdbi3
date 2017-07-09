@@ -14,9 +14,9 @@ import javax.sql.DataSource;
 import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
+import java.time.*;
 import java.util.Date;
+import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 
@@ -37,9 +37,12 @@ public class TransactionWithoutProxyTest {
 		db = Jdbi.create(dataSource);
 		db.registerColumnMapper( new AnnotatedEntityMapperFactory() );
 		db.installPlugins();
-
-		final UserQueries q = db.onDemand( UserQueries.class );
-		q.initializeDatabase();
+		final UserQueries userQueries = db.onDemand( UserQueries.class );
+		userQueries.initializeDatabase();
+		final LogQueries logQueries = db.onDemand(LogQueries.class);
+		logQueries.initializeDatabase();
+		final DataTypesQueries dataTypesQueries = db.onDemand(DataTypesQueries.class);
+		dataTypesQueries.initializeDatabase();
 	}
 
 	@Test
@@ -48,7 +51,6 @@ public class TransactionWithoutProxyTest {
 		final User paul = new User();
 		paul.id = 2l;
 		paul.name = "Paul";
-
 		savePaulInDB( paul );
 		ensureThatDoesNotSavedARoleForPaul( paul );
 	}
@@ -72,8 +74,8 @@ public class TransactionWithoutProxyTest {
 		val log = new Log();
 		log.setDate( ZonedDateTime.now() );
 		log.setText( "Log Text" );
-		saveLogInDb( log );
-		ensureLogIfExistsInDbAndDateTimeIsCorrect( log );
+		db.onDemand(LogQueries.class).insert(log);
+		ensureLogIfExistsInDbAndDateTimeIsCorrect(log);
 	}
 
 	private Object zonedDateTimeRetriever(Class<?> t, ResultSet resultSet, String name) throws SQLException {
@@ -81,17 +83,26 @@ public class TransactionWithoutProxyTest {
 		return ZonedDateTime.ofInstant(instant, ZoneId.systemDefault());
 	}
 
-	private void saveLogInDb( Log log ){
-		final LogQueries q = db.onDemand(LogQueries.class);
-		q.initializeDatabase();
-		q.insert( log );
-	}
-
 	private void ensureLogIfExistsInDbAndDateTimeIsCorrect( Log log ){
 		final LogQueries q = db.onDemand(LogQueries.class);
 		val dbLogs = q.selectAll();
 		assertEquals( 1, dbLogs.size() );
 		assertEquals( log.getDate(), dbLogs.get(0).getDate() );
+	}
+
+	@Test
+	public void ensureThatWorksWithDataTypes(){
+		final DataTypes object = new DataTypes();
+		object.setMyLocalDateTime(LocalDateTime.now());
+		object.setMyLocalDate(LocalDate.now());
+		object.setMyLocalTime(LocalTime.now().withNano(0));
+		final DataTypesQueries dataTypesQueries = db.onDemand(DataTypesQueries.class);
+		dataTypesQueries.insert(object);
+		final List<DataTypes> results = dataTypesQueries.find();
+		assertEquals(1, results.size());
+		assertEquals(object.getMyLocalDateTime(), results.get(0).getMyLocalDateTime());
+		assertEquals(object.getMyLocalDate(), results.get(0).getMyLocalDate());
+		assertEquals(object.getMyLocalTime(), results.get(0).getMyLocalTime());
 	}
 
 }

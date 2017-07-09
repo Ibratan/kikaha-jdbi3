@@ -2,6 +2,9 @@ package kikaha.jdbi.serializers;
 
 import java.math.BigDecimal;
 import java.sql.*;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.Date;
 import java.util.*;
 
@@ -29,6 +32,9 @@ public abstract class ResultSetDataRetriever {
 		RETRIEVERS.put( double.class, ( c, rs, nm ) -> rs.getDouble( nm ) );
 		RETRIEVERS.put( BigDecimal.class, ( c, rs, nm ) -> rs.getBigDecimal( nm ) );
 		RETRIEVERS.put( Timestamp.class, ( c, rs, nm ) -> rs.getTimestamp( nm ) );
+		RETRIEVERS.put( LocalDateTime.class, ( c, rs, nm ) -> rs.getTimestamp(nm).toLocalDateTime() );
+		RETRIEVERS.put( LocalDate.class, ( c, rs, nm ) -> rs.getTimestamp( nm ).toLocalDateTime().toLocalDate() );
+		RETRIEVERS.put( LocalTime.class, ( c, rs, nm ) -> rs.getTimestamp( nm ).toLocalDateTime().toLocalTime() );
 		RETRIEVERS.put( Time.class, ( c, rs, nm ) -> rs.getTime( nm ) );
 		RETRIEVERS.put( Date.class, ( c, rs, nm ) -> rs.getTimestamp( nm ) );
 		RETRIEVERS.put( java.sql.Date.class, ( c, rs, nm ) -> rs.getDate( nm ) );
