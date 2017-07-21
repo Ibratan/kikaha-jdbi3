@@ -9,8 +9,8 @@
         <artifactId>kikaha-project</artifactId>
     </parent>
 
-    <artifactId>kikaha-jdbi</artifactId>
-    <version>0.1.1</version>
+    <artifactId>kikaha-jdbi3</artifactId>
+    <version>0.2.0</version>
     <packaging>jar</packaging>
     <name>${project.artifactId}</name>
     <url>https://github.com/Ibratan/kikaha-jdbi3</url>
@@ -43,15 +43,8 @@
     </scm>
 
     <properties>
-        <!-- project configurations -->
-        <config.dir.source>source</config.dir.source>
-        <config.dir.resource>resources</config.dir.resource>
-        <config.dir.test.source>tests</config.dir.test.source>
-        <config.dir.test.resource>tests-resources</config.dir.test.resource>
-        <config.dir.output>output</config.dir.output>
-        <config.dir.web>webapp</config.dir.web>
         <!-- dependencies version configuration -->
-        <version.jdbi>3.0.0-beta1</version.jdbi>
+        <version.jdbi>3.0.0-beta2</version.jdbi>
     </properties>
 
     <dependencies>
