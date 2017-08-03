@@ -1,26 +1,26 @@
 # kikaha-jdbi
 Provide tight integration of Jdbi3 for the just released Kikaha 2.0.x version.
 
-[![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.skullabs.kikaha/kikaha-jdbi/badge.svg)](https://maven-badges.herokuapp.com/maven-central/io.skullabs.kikaha/kikaha-jdbi)
+[![Maven Central](https://maven-badges.herokuapp.com/maven-central/io.skullabs.kikaha/kikaha-jdbi3/badge.svg)](https://maven-badges.herokuapp.com/maven-central/io.skullabs.kikaha/kikaha-jdbi3)
 
 ## Dependencies
 If you use Maven:
 ```xml
 <dependency>
     <groupId>io.skullabs.kikaha</groupId>
-    <artifactId>kikaha-jdbi</artifactId>
-    <version>0.1.0</version>
+    <artifactId>kikaha-jdbi3</artifactId>
+    <version>0.2.0</version>
 </dependency>
 ```
 If you use Gradle:
 ```gradle
 dependencies {
-    compile group: 'io.skullabs.kikaha', name: 'kikaha-jdbi', version: '0.1.0'
+    compile group: 'io.skullabs.kikaha', name: 'kikaha-jdbi3', version: '0.2.0'
 }
 ```
 If you are using the Kikaha's command line tool:
 ```bash
-kikaha project add_dep 'io.skullabs.kikaha:kikaha-jdbi:0.1.0'
+kikaha project add_dep 'io.skullabs.kikaha:kikaha-jdbi3:0.2.0'
 ```
 
 ## Getting Started
