@@ -5,12 +5,12 @@
 
     <parent>
         <groupId>io.skullabs.kikaha</groupId>
-        <version>2.1.0-beta2</version>
+        <version>2.1.2.Final</version>
         <artifactId>kikaha-project</artifactId>
     </parent>
 
     <artifactId>kikaha-jdbi3</artifactId>
-    <version>0.2.0</version>
+    <version>0.3.0</version>
     <packaging>jar</packaging>
     <name>${project.artifactId}</name>
     <url>https://github.com/Ibratan/kikaha-jdbi3</url>
@@ -44,7 +44,7 @@
 
     <properties>
         <!-- dependencies version configuration -->
-        <version.jdbi>3.0.0-beta2</version.jdbi>
+        <version.jdbi>3.0.0-rc1</version.jdbi>
     </properties>
 
     <dependencies>
@@ -58,8 +58,12 @@
             <artifactId>kikaha-db</artifactId>
         </dependency>
         <dependency>
+            <groupId>io.skullabs.kikaha</groupId>
+            <artifactId>kikaha-core</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.jdbi</groupId>
-            <artifactId>jdbi3</artifactId>
+            <artifactId>jdbi3-core</artifactId>
             <version>${version.jdbi}</version>
         </dependency>
         <dependency>
